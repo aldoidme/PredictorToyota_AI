@@ -1,0 +1,3 @@
+listing_id,model_id,model_name,year,mileage_km,price_pen,location,condition,posted_date,source_url,source
+UL001,COROLLA,Corolla,2017,68000,52000,Lima,bueno,2024-05-10,,portal_web
+UL002,HILUX,Hilux,2019,75000,98000,Arequipa,bueno,2024-05-12,,portal_web

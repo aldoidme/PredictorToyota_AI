@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Toyota Peru - Dashboard IDME</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/dashboard.css" />
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-grid"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div>
+        <div class="brand-title">Toyota Predictor Peru</div>
+        <div class="brand-subtitle">Predicciones claras para usuarios reales</div>
+      </div>
+    </div>
+    <div class="topbar-meta">
+      <span class="badge">Actualizado: 2026-05-21 18:42</span>
+      <span class="badge accent">Datos OK</span>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div class="hero-copy">
+        <h1>Panorama Toyota en Peru</h1>
+        <p>Acciones, ventas y tendencias en un solo lugar.</p>
+        <div class="hero-tags">
+          <span class="tag">Modelos principales</span>
+          <span class="tag">Datos reales</span>
+          <span class="tag">Recomendaciones simples</span>
+        </div>
+      </div>
+      <div class="hero-kpis">
+        
+          
+          <div class="kpi-card">
+            <div class="kpi-label">Precio cierre</div>
+            <div class="kpi-value">2502</div>
+            <div class="kpi-foot"></div>
+          </div>
+          
+          <div class="kpi-card">
+            <div class="kpi-label">Modelos activos</div>
+            <div class="kpi-value">3</div>
+            <div class="kpi-foot"></div>
+          </div>
+          
+          <div class="kpi-card">
+            <div class="kpi-label">Ventas ultimo mes</div>
+            <div class="kpi-value">95</div>
+            <div class="kpi-foot">2024-01-01</div>
+          </div>
+          
+        
+      </div>
+    </section>
+
+    <section class="model-picker">
+      <div class="section-header">
+        <h2>Selecciona tu modelo</h2>
+        <p>La informacion se actualiza abajo sin cambiar de pagina.</p>
+      </div>
+      <div class="model-chips">
+        <button class="model-chip active" data-model="HILUX" data-label="Toyota Hilux">Toyota Hilux</button>
+        <button class="model-chip" data-model="YARIS" data-label="Toyota Yaris">Toyota Yaris</button>
+        <button class="model-chip" data-model="COROLLA" data-label="Toyota Corolla">Toyota Corolla</button>
+        <button class="model-chip" data-model="AVANZA" data-label="Toyota Avanza">Toyota Avanza</button>
+        <button class="model-chip" data-model="RAV4" data-label="Toyota RAV4">Toyota RAV4</button>
+        <button class="model-chip" data-model="ETIOS" data-label="Toyota Etios">Toyota Etios</button>
+        <button class="model-chip" data-model="RUSH" data-label="Toyota Rush">Toyota Rush</button>
+        <button class="model-chip" data-model="FORTUNER" data-label="Toyota Fortuner">Toyota Fortuner</button>
+        <button class="model-chip" data-model="RAIZE" data-label="Toyota Raize">Toyota Raize</button>
+        <button class="model-chip" data-model="COROLLA_CROSS" data-label="Toyota Corolla Cross">Toyota Corolla Cross</button>
+      </div>
+    </section>
+
+    <section class="model-focus">
+      <div class="focus-left">
+        <h2 id="modelTitle">Toyota Hilux</h2>
+        <p id="modelSubtitle">Selecciona un modelo para ver su demanda, comparacion y prediccion.</p>
+        <div class="focus-highlight" id="modelRecommendation">Recomendacion: --</div>
+        <div class="focus-points">
+          
+            
+            <div class="focus-point">Acciones en subida: 0</div>
+            
+            <div class="focus-point">Acciones en baja: 0</div>
+            
+            <div class="focus-point">Modelos con demanda en crecimiento: 0</div>
+            
+            <div class="focus-point">Modelos con demanda en caida: 0</div>
+            
+          
+        </div>
+      </div>
+      <div class="focus-right">
+        <div class="info-card">
+          <div class="info-label">Demanda reciente</div>
+          <div class="info-value" id="demandValue">--</div>
+          <div class="info-sub" id="demandTrend">--</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Nuevo vs usado</div>
+          <div class="info-value" id="usedValue">--</div>
+          <div class="info-sub" id="usedRecommendation">--</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Prediccion demanda</div>
+          <div class="info-value" id="predictionValue">--</div>
+          <div class="info-sub" id="predictionTrend">--</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Precio usado aprox</div>
+          <div class="info-value" id="priceValue">--</div>
+          <div class="info-sub">Pendiente de datos locales</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="model-summary">
+  <div class="section-header">
+    <h2>Resumen del modelo</h2>
+    <p>Datos clave en una sola mirada.</p>
+  </div>
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-icon">M</div>
+      <div class="summary-label">Modelo</div>
+      <div class="summary-value" id="summaryModelName">Toyota Hilux</div>
+      <div class="summary-sub">Seleccionado</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon">D</div>
+      <div class="summary-label">Demanda</div>
+      <div class="summary-value" id="summaryDemand">--</div>
+      <div class="summary-sub">Tendencia reciente</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon">N</div>
+      <div class="summary-label">Precio nuevo</div>
+      <div class="summary-value" id="summaryPriceNew">S/ --</div>
+      <div class="summary-sub">Aproximado</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon">U</div>
+      <div class="summary-label">Precio usado</div>
+      <div class="summary-value" id="summaryPriceUsed">S/ --</div>
+      <div class="summary-sub">Aproximado</div>
+    </div>
+    <div class="summary-card highlight">
+      <div class="summary-icon">R</div>
+      <div class="summary-label">Recomendacion</div>
+      <div class="summary-value" id="summaryRecommendation">--</div>
+      <div class="summary-sub">Basado en demanda y usados</div>
+    </div>
+  </div>
+</section>
+
+    <section class="demand-indicator">
+  <div class="section-header">
+    <h2>Indicador de demanda</h2>
+    <p>Estado del modelo en una sola mirada.</p>
+  </div>
+  <div class="card demand-card">
+    <div class="demand-header">
+      <span class="demand-label">Demanda actual</span>
+      <span class="demand-badge" id="demandBadge">Sin data</span>
+    </div>
+    <div class="demand-bar">
+      <div class="demand-fill" id="demandFill"></div>
+    </div>
+    <div class="demand-foot" id="demandFoot">Selecciona un modelo para ver su demanda.</div>
+  </div>
+</section>
+
+    <section class="compare-section">
+  <div class="section-header">
+    <h2>Comparacion nuevo vs usado</h2>
+    <p>Elige rapido que conviene mas comprar.</p>
+  </div>
+  <div class="card compare-card">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Indicador</th>
+          <th>Detalle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Precio nuevo</td>
+          <td id="compareNewPrice">S/ --</td>
+        </tr>
+        <tr>
+          <td>Precio usado</td>
+          <td id="compareUsedPrice">S/ --</td>
+        </tr>
+        <tr>
+          <td>Diferencia</td>
+          <td id="compareDiff">S/ --</td>
+        </tr>
+        <tr>
+          <td>Estabilidad</td>
+          <td id="compareStability">Sin data</td>
+        </tr>
+        <tr>
+          <td>Recomendacion</td>
+          <td id="compareRecommendation">--</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+    <section class="final-recommendation">
+  <div class="section-header">
+    <h2>Recomendacion final</h2>
+    <p>Mensaje claro para tomar decision.</p>
+  </div>
+  <div class="card recommendation-card">
+    <div class="recommendation-badge" id="finalRecoBadge">Recomendacion</div>
+    <div class="recommendation-title" id="finalRecoTitle">--</div>
+    <div class="recommendation-chips" id="finalRecoChips">
+      <span class="chip">Demanda</span>
+      <span class="chip">Estabilidad</span>
+      <span class="chip">Reventa</span>
+    </div>
+  </div>
+</section>
+
+    <section class="toyota-status">
+  <div class="section-header">
+    <h2>Estado general Toyota</h2>
+    <p>Resumen simple de la tendencia de acciones.</p>
+  </div>
+  <div class="card status-card">
+    <div class="status-main">
+      <div class="status-title" id="toyotaStatusTitle">Estado estable</div>
+      <div class="status-sub" id="toyotaStatusSubtitle">Sin data disponible.</div>
+    </div>
+    <div class="status-actions">
+      <span class="status-pill" id="toyotaTrend">Tendencia: --</span>
+      <span class="status-pill accent" id="toyotaAction">Recomendacion: --</span>
+    </div>
+  </div>
+</section>
+
+    <section class="model-compare">
+      <div class="section-header">
+        <h2>Comparador de modelos</h2>
+        <p>Compara dos modelos en segundos.</p>
+      </div>
+      <div class="compare-controls">
+        <div class="compare-select">
+          <label for="compareModelA">Modelo A</label>
+          <select id="compareModelA"></select>
+        </div>
+        <div class="compare-select">
+          <label for="compareModelB">Modelo B</label>
+          <select id="compareModelB"></select>
+        </div>
+      </div>
+      <div class="compare-cards">
+        <div class="card">
+          <h3 id="compareTitleA">Modelo A</h3>
+          <div class="compare-row">
+            <span>Demanda</span>
+            <span id="compareDemandA">--</span>
+          </div>
+          <div class="compare-bar">
+            <div class="compare-fill" id="compareDemandBarA"></div>
+          </div>
+          <div class="compare-row">
+            <span>Precio aprox</span>
+            <span id="comparePriceA">S/ --</span>
+          </div>
+          <div class="compare-row">
+            <span>Estabilidad</span>
+            <span id="compareStabilityA">--</span>
+          </div>
+          <div class="compare-row">
+            <span>Tendencia</span>
+            <span id="compareTrendA">--</span>
+          </div>
+          <div class="compare-row">
+            <span>Recomendacion</span>
+            <span id="compareRecoA">--</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3 id="compareTitleB">Modelo B</h3>
+          <div class="compare-row">
+            <span>Demanda</span>
+            <span id="compareDemandB">--</span>
+          </div>
+          <div class="compare-bar">
+            <div class="compare-fill" id="compareDemandBarB"></div>
+          </div>
+          <div class="compare-row">
+            <span>Precio aprox</span>
+            <span id="comparePriceB">S/ --</span>
+          </div>
+          <div class="compare-row">
+            <span>Estabilidad</span>
+            <span id="compareStabilityB">--</span>
+          </div>
+          <div class="compare-row">
+            <span>Tendencia</span>
+            <span id="compareTrendB">--</span>
+          </div>
+          <div class="compare-row">
+            <span>Recomendacion</span>
+            <span id="compareRecoB">--</span>
+          </div>
+        </div>
+      </div>
+      <div class="card compare-table-card">
+        <table class="compare-table-simple">
+          <thead>
+            <tr>
+              <th>Indicador</th>
+              <th id="compareHeaderA">Modelo A</th>
+              <th id="compareHeaderB">Modelo B</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Demanda</td>
+              <td id="compareTableDemandA">--</td>
+              <td id="compareTableDemandB">--</td>
+            </tr>
+            <tr>
+              <td>Precio aprox</td>
+              <td id="compareTablePriceA">S/ --</td>
+              <td id="compareTablePriceB">S/ --</td>
+            </tr>
+            <tr>
+              <td>Estabilidad</td>
+              <td id="compareTableStabilityA">--</td>
+              <td id="compareTableStabilityB">--</td>
+            </tr>
+            <tr>
+              <td>Tendencia</td>
+              <td id="compareTableTrendA">--</td>
+              <td id="compareTableTrendB">--</td>
+            </tr>
+            <tr>
+              <td>Recomendacion</td>
+              <td id="compareTableRecoA">--</td>
+              <td id="compareTableRecoB">--</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Graficos simples</h2>
+        <p>Visuales claros para entender la demanda y la comparacion.</p>
+      </div>
+      <div class="chart-grid">
+        <div class="card chart">
+          <h3>Demanda historica</h3>
+          
+            <div>                            <div id="chart-demand" class="plotly-graph-div" style="height:360px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("chart-demand")) {                    Plotly.newPlot(                        "chart-demand",                        [{"hovertemplate":"%{x|%Y-%m}\u003cbr\u003eUnidades: %{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"COROLLA","line":{"width":2},"mode":"lines","name":"COROLLA","x":["2023-12-01T00:00:00.000000"],"y":{"dtype":"i1","bdata":"eA=="},"type":"scatter"},{"hovertemplate":"%{x|%Y-%m}\u003cbr\u003e%{text}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"COROLLA","marker":{"color":["#facc15"],"size":7},"mode":"markers","name":"COROLLA estado","showlegend":false,"text":["Estable"],"x":["2023-12-01T00:00:00.000000"],"y":{"dtype":"i1","bdata":"eA=="},"type":"scatter"},{"hovertemplate":"%{x|%Y-%m}\u003cbr\u003eUnidades: %{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"HILUX","line":{"width":2},"mode":"lines","name":"HILUX","x":["2024-01-01T00:00:00.000000"],"y":{"dtype":"i1","bdata":"Xw=="},"type":"scatter"},{"hovertemplate":"%{x|%Y-%m}\u003cbr\u003e%{text}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"HILUX","marker":{"color":["#facc15"],"size":7},"mode":"markers","name":"HILUX estado","showlegend":false,"text":["Estable"],"x":["2024-01-01T00:00:00.000000"],"y":{"dtype":"i1","bdata":"Xw=="},"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"margin":{"l":20,"r":20,"t":40,"b":20},"title":{"text":"Ventas historicas y variacion"},"height":360,"showlegend":false,"yaxis":{"title":{"text":"Unidades"}},"xaxis":{"title":{"text":"Mes"}}},                        {"responsive": true}                    )                };            </script>        </div>
+          
+        </div>
+        <div class="card chart">
+          <h3>Nuevo vs usado</h3>
+          
+            <div>                            <div id="73f928ea-cb48-45e7-9a47-716b395b4357" class="plotly-graph-div" style="height:360px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("73f928ea-cb48-45e7-9a47-716b395b4357")) {                    Plotly.newPlot(                        "73f928ea-cb48-45e7-9a47-716b395b4357",                        [{"alignmentgroup":"True","hovertemplate":"variable=used_count\u003cbr\u003emodel_id=%{x}\u003cbr\u003evalue=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"used_count","marker":{"color":"#e53946","pattern":{"shape":""}},"name":"used_count","offsetgroup":"used_count","orientation":"v","showlegend":true,"textposition":"auto","x":["COROLLA","HILUX"],"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAAAA8D8AAAAAAADwPw=="},"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"variable=new_units\u003cbr\u003emodel_id=%{x}\u003cbr\u003evalue=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"new_units","marker":{"color":"#fca311","pattern":{"shape":""}},"name":"new_units","offsetgroup":"new_units","orientation":"v","showlegend":true,"textposition":"auto","x":["COROLLA","HILUX"],"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAAAAAAA=="},"yaxis":"y","type":"bar"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"geo":{"bgcolor":"rgb(17,17,17)","lakecolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","showlakes":true,"showland":true,"subunitcolor":"#506784"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"dark"},"paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"sliderdefaults":{"bgcolor":"#C8D4E3","bordercolor":"rgb(17,17,17)","borderwidth":1,"tickwidth":0},"ternary":{"aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"xaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"model_id"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"value"}},"legend":{"title":{"text":"variable"},"tracegroupgap":0},"title":{"text":"Actividad nuevo vs usado"},"barmode":"group","margin":{"l":20,"r":20,"t":40,"b":20},"height":360},                        {"responsive": true}                    )                };            </script>        </div>
+          
+        </div>
+        <div class="card chart">
+          <h3>Tendencias</h3>
+          
+            <div>                            <div id="7b290e37-dd0d-41be-8a1f-26333c939c7f" class="plotly-graph-div" style="height:360px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("7b290e37-dd0d-41be-8a1f-26333c939c7f")) {                    Plotly.newPlot(                        "7b290e37-dd0d-41be-8a1f-26333c939c7f",                        [{"hovertemplate":"keyword=toyota peru\u003cbr\u003edate=%{x}\u003cbr\u003evalue=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"toyota peru","line":{"color":"#e53946","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"toyota peru","orientation":"v","showlegend":true,"x":["2024-05-12T00:00:00.000000"],"xaxis":"x","y":{"dtype":"i1","bdata":"PQ=="},"yaxis":"y","type":"scatter"},{"hovertemplate":"keyword=toyota corolla\u003cbr\u003edate=%{x}\u003cbr\u003evalue=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"toyota corolla","line":{"color":"#fca311","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"toyota corolla","orientation":"v","showlegend":true,"x":["2024-05-12T00:00:00.000000"],"xaxis":"x","y":{"dtype":"i1","bdata":"MA=="},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"geo":{"bgcolor":"rgb(17,17,17)","lakecolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","showlakes":true,"showland":true,"subunitcolor":"#506784"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"dark"},"paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"sliderdefaults":{"bgcolor":"#C8D4E3","bordercolor":"rgb(17,17,17)","borderwidth":1,"tickwidth":0},"ternary":{"aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"xaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"date"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"value"}},"legend":{"title":{"text":"keyword"},"tracegroupgap":0},"title":{"text":"Indice de tendencias"},"margin":{"l":20,"r":20,"t":40,"b":20},"height":360},                        {"responsive": true}                    )                };            </script>        </div>
+          
+        </div>
+        <div class="card chart">
+          <h3>Predicciones</h3>
+          
+            <div>                            <div id="84d50266-7f29-4b44-b198-ed22b0c6ea0b" class="plotly-graph-div" style="height:360px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("84d50266-7f29-4b44-b198-ed22b0c6ea0b")) {                    Plotly.newPlot(                        "84d50266-7f29-4b44-b198-ed22b0c6ea0b",                        [{"name":"Prob. subida","x":["7203.T"],"y":[null],"type":"bar","xaxis":"x","yaxis":"y"},{"name":"Unidades","x":["COROLLA","HILUX"],"y":[null,null],"type":"bar","xaxis":"x2","yaxis":"y2"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,0.45]},"yaxis":{"anchor":"x","domain":[0.0,1.0]},"xaxis2":{"anchor":"y2","domain":[0.55,1.0]},"yaxis2":{"anchor":"x2","domain":[0.0,1.0]},"annotations":[{"font":{"size":16},"showarrow":false,"text":"Acciones (prob subida)","x":0.225,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Demanda (unidades)","x":0.775,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"}],"margin":{"l":20,"r":20,"t":40,"b":20},"height":360,"showlegend":false},                        {"responsive": true}                    )                };            </script>        </div>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Comparacion entre modelos</h2>
+        <p>Resumen sencillo para usuarios no tecnicos.</p>
+      </div>
+      <div class="table-grid">
+        
+          
+          <div class="card">
+            <h3>Resumen de demanda</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    
+                    <th>model_id</th>
+                    
+                    <th>region</th>
+                    
+                    <th>last_units</th>
+                    
+                    <th>pct_change</th>
+                    
+                    <th>demand_trend</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  
+                  <tr data-model="COROLLA">
+                    
+                    <td>COROLLA</td>
+                    
+                    <td>Lima</td>
+                    
+                    <td>120</td>
+                    
+                    <td>--</td>
+                    
+                    <td>insuficiente</td>
+                    
+                  </tr>
+                  
+                  
+                  <tr data-model="HILUX">
+                    
+                    <td>HILUX</td>
+                    
+                    <td>Lima</td>
+                    
+                    <td>95</td>
+                    
+                    <td>--</td>
+                    
+                    <td>insuficiente</td>
+                    
+                  </tr>
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div class="card">
+            <h3>Nuevo vs usado</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    
+                    <th>model_id</th>
+                    
+                    <th>used_count</th>
+                    
+                    <th>new_units</th>
+                    
+                    <th>ratio_used_new</th>
+                    
+                    <th>recommendation</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  
+                  <tr data-model="COROLLA">
+                    
+                    <td>COROLLA</td>
+                    
+                    <td>1</td>
+                    
+                    <td>0.00</td>
+                    
+                    <td>--</td>
+                    
+                    <td>recomendable usado</td>
+                    
+                  </tr>
+                  
+                  
+                  <tr data-model="HILUX">
+                    
+                    <td>HILUX</td>
+                    
+                    <td>1</td>
+                    
+                    <td>0.00</td>
+                    
+                    <td>--</td>
+                    
+                    <td>recomendable usado</td>
+                    
+                  </tr>
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div class="card">
+            <h3>Prediccion demanda</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    
+                    <th>model_id</th>
+                    
+                    <th>region</th>
+                    
+                    <th>predicted_units</th>
+                    
+                    <th>trend</th>
+                    
+                    <th>confidence</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  
+                  <tr data-model="COROLLA">
+                    
+                    <td>COROLLA</td>
+                    
+                    <td>Lima</td>
+                    
+                    <td>--</td>
+                    
+                    <td>insuficiente</td>
+                    
+                    <td>0.40</td>
+                    
+                  </tr>
+                  
+                  
+                  <tr data-model="HILUX">
+                    
+                    <td>HILUX</td>
+                    
+                    <td>Lima</td>
+                    
+                    <td>--</td>
+                    
+                    <td>insuficiente</td>
+                    
+                    <td>0.40</td>
+                    
+                  </tr>
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+        
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Proyecto Toyota Predictor Peru</span>
+    <span class="muted">Generado con Python, Plotly y Jinja2</span>
+  </footer>
+
+  <script>
+    window.TOYOTA_TABLES = [{"columns": ["symbol", "last_close", "pct_change", "trend"], "rows": [["7203.T", "2502", "0.01", "estable"]], "title": "Resumen de acciones"}, {"columns": ["model_id", "region", "last_units", "pct_change", "demand_trend"], "rows": [["COROLLA", "Lima", "120", "--", "insuficiente"], ["HILUX", "Lima", "95", "--", "insuficiente"]], "title": "Resumen de demanda"}, {"columns": ["model_id", "used_count", "new_units", "ratio_used_new", "recommendation"], "rows": [["COROLLA", "1", "0.00", "--", "recomendable usado"], ["HILUX", "1", "0.00", "--", "recomendable usado"]], "title": "Nuevo vs usado"}, {"columns": ["model_id", "region", "predicted_units", "trend", "confidence"], "rows": [["COROLLA", "Lima", "--", "insuficiente", "0.40"], ["HILUX", "Lima", "--", "insuficiente", "0.40"]], "title": "Prediccion demanda"}];
+  </script>
+  <script src="dashboard/model_compare.js"></script>
+  <script src="dashboard/model_charts.js"></script>
+  <script src="dashboard/model_selector.js"></script>
+</body>
+</html>

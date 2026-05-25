@@ -1,0 +1,3 @@
+model_id,region,period,units_sold,channel,source
+COROLLA,Lima,2023-12-01,120,concesionario,reporte_mensual
+HILUX,Lima,2024-01-01,95,concesionario,reporte_mensual

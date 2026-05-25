@@ -1,0 +1,38 @@
+<section class="model-summary panel">
+  <div class="section-header">
+    <h2>Resumen del modelo</h2>
+    <p>Datos clave en una sola mirada.</p>
+  </div>
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-icon">M</div>
+      <div class="summary-label">Modelo</div>
+      <div class="summary-value" id="summaryModelName">{{ selected_model | default("Toyota Hilux") }}</div>
+      <div class="summary-sub">Seleccionado</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon">D</div>
+      <div class="summary-label">Demanda</div>
+      <div class="summary-value" id="summaryDemand">--</div>
+      <div class="summary-sub">Tendencia reciente</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon">N</div>
+      <div class="summary-label">Precio nuevo</div>
+      <div class="summary-value" id="summaryPriceNew">S/ --</div>
+      <div class="summary-sub">Aproximado</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon">U</div>
+      <div class="summary-label">Precio usado</div>
+      <div class="summary-value" id="summaryPriceUsed">S/ --</div>
+      <div class="summary-sub">Aproximado</div>
+    </div>
+    <div class="summary-card highlight">
+      <div class="summary-icon">R</div>
+      <div class="summary-label">Recomendacion</div>
+      <div class="summary-value" id="summaryRecommendation">--</div>
+      <div class="summary-sub">Basado en demanda y usados</div>
+    </div>
+  </div>
+</section>

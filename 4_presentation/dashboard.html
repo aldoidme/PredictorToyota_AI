@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ report_title | default("Toyota Predictor Peru") }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/dashboard.css" />
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-grid"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div>
+        <div class="brand-title">Toyota Predictor Peru</div>
+        <div class="brand-subtitle">Predicciones claras para usuarios reales</div>
+      </div>
+    </div>
+    <div class="topbar-meta">
+      <span class="badge">Actualizado: {{ updated_at | default("--") }}</span>
+      <span class="badge accent">{{ data_status | default("Datos OK") }}</span>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <h1>{{ headline | default("Toyota Predictor Peru") }}</h1>
+        <p>{{ summary_text | default("Elige tu modelo Toyota y revisa su demanda, comparaciones y recomendaciones en una sola vista.") }}</p>
+        <div class="hero-tags">
+          <span class="tag">Modelos principales</span>
+          <span class="tag">Datos reales</span>
+          <span class="tag">Recomendaciones simples</span>
+        </div>
+      </div>
+      <div class="hero-kpis">
+        {% if kpis %}
+          {% for kpi in kpis %}
+          <div class="kpi-card">
+            <div class="kpi-label">{{ kpi.label }}</div>
+            <div class="kpi-value">{{ kpi.value }}</div>
+            <div class="kpi-foot">{{ kpi.delta | default("--") }}</div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty">Sin KPIs disponibles.</div>
+        {% endif %}
+      </div>
+    </section>
+
+    <section class="model-picker panel">
+      <div class="section-header">
+        <h2>Selecciona tu modelo</h2>
+        <p>La informacion se actualiza abajo sin cambiar de pagina.</p>
+      </div>
+      <div class="model-chips">
+        <button class="model-chip active" data-model="HILUX" data-label="Toyota Hilux">Toyota Hilux</button>
+        <button class="model-chip" data-model="YARIS" data-label="Toyota Yaris">Toyota Yaris</button>
+        <button class="model-chip" data-model="COROLLA" data-label="Toyota Corolla">Toyota Corolla</button>
+        <button class="model-chip" data-model="AVANZA" data-label="Toyota Avanza">Toyota Avanza</button>
+        <button class="model-chip" data-model="RAV4" data-label="Toyota RAV4">Toyota RAV4</button>
+        <button class="model-chip" data-model="ETIOS" data-label="Toyota Etios">Toyota Etios</button>
+        <button class="model-chip" data-model="RUSH" data-label="Toyota Rush">Toyota Rush</button>
+        <button class="model-chip" data-model="FORTUNER" data-label="Toyota Fortuner">Toyota Fortuner</button>
+        <button class="model-chip" data-model="RAIZE" data-label="Toyota Raize">Toyota Raize</button>
+        <button class="model-chip" data-model="COROLLA_CROSS" data-label="Toyota Corolla Cross">Toyota Corolla Cross</button>
+      </div>
+    </section>
+
+    <section class="overview">
+      <div class="overview-main">
+        <section class="model-focus panel">
+          <div class="focus-left">
+            <h2 id="modelTitle">Toyota Hilux</h2>
+            <p id="modelSubtitle">Selecciona un modelo para ver su demanda, comparacion y prediccion.</p>
+            <div class="focus-highlight" id="modelRecommendation">Recomendacion: --</div>
+            <div class="focus-points">
+              {% if status_points %}
+                {% for item in status_points %}
+                <div class="focus-point">{{ item }}</div>
+                {% endfor %}
+              {% else %}
+                <div class="focus-point">Sin indicadores generales.</div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="focus-right">
+            <div class="info-card">
+              <div class="info-label">Demanda reciente</div>
+              <div class="info-value" id="demandValue">--</div>
+              <div class="info-sub" id="demandTrend">--</div>
+            </div>
+            <div class="info-card">
+              <div class="info-label">Nuevo vs usado</div>
+              <div class="info-value" id="usedValue">--</div>
+              <div class="info-sub" id="usedRecommendation">--</div>
+            </div>
+            <div class="info-card">
+              <div class="info-label">Prediccion demanda</div>
+              <div class="info-value" id="predictionValue">--</div>
+              <div class="info-sub" id="predictionTrend">--</div>
+            </div>
+            <div class="info-card">
+              <div class="info-label">Precio usado aprox</div>
+              <div class="info-value" id="priceValue">--</div>
+              <div class="info-sub">Pendiente de datos locales</div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="overview-side">
+        {% include "templates/model_summary.html" %}
+        {% include "templates/demand_indicator.html" %}
+        {% include "templates/new_vs_used_compare.html" %}
+        {% include "templates/final_recommendation.html" %}
+        {% include "templates/toyota_status.html" %}
+      </div>
+    </section>
+
+    <section class="model-compare panel">
+      <div class="section-header">
+        <h2>Comparador de modelos</h2>
+        <p>Compara dos modelos en segundos.</p>
+      </div>
+      <div class="compare-controls">
+        <div class="compare-select">
+          <label for="compareModelA">Modelo A</label>
+          <select id="compareModelA"></select>
+        </div>
+        <div class="compare-select">
+          <label for="compareModelB">Modelo B</label>
+          <select id="compareModelB"></select>
+        </div>
+      </div>
+      <div class="compare-cards">
+        <div class="card">
+          <h3 id="compareTitleA">Modelo A</h3>
+          <div class="compare-row">
+            <span>Demanda</span>
+            <span id="compareDemandA">--</span>
+          </div>
+          <div class="compare-bar">
+            <div class="compare-fill" id="compareDemandBarA"></div>
+          </div>
+          <div class="compare-row">
+            <span>Precio aprox</span>
+            <span id="comparePriceA">S/ --</span>
+          </div>
+          <div class="compare-row">
+            <span>Estabilidad</span>
+            <span id="compareStabilityA">--</span>
+          </div>
+          <div class="compare-row">
+            <span>Tendencia</span>
+            <span id="compareTrendA">--</span>
+          </div>
+          <div class="compare-row">
+            <span>Recomendacion</span>
+            <span id="compareRecoA">--</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3 id="compareTitleB">Modelo B</h3>
+          <div class="compare-row">
+            <span>Demanda</span>
+            <span id="compareDemandB">--</span>
+          </div>
+          <div class="compare-bar">
+            <div class="compare-fill" id="compareDemandBarB"></div>
+          </div>
+          <div class="compare-row">
+            <span>Precio aprox</span>
+            <span id="comparePriceB">S/ --</span>
+          </div>
+          <div class="compare-row">
+            <span>Estabilidad</span>
+            <span id="compareStabilityB">--</span>
+          </div>
+          <div class="compare-row">
+            <span>Tendencia</span>
+            <span id="compareTrendB">--</span>
+          </div>
+          <div class="compare-row">
+            <span>Recomendacion</span>
+            <span id="compareRecoB">--</span>
+          </div>
+        </div>
+      </div>
+      <div class="card compare-table-card">
+        <table class="compare-table-simple">
+          <thead>
+            <tr>
+              <th>Indicador</th>
+              <th id="compareHeaderA">Modelo A</th>
+              <th id="compareHeaderB">Modelo B</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Demanda</td>
+              <td id="compareTableDemandA">--</td>
+              <td id="compareTableDemandB">--</td>
+            </tr>
+            <tr>
+              <td>Precio aprox</td>
+              <td id="compareTablePriceA">S/ --</td>
+              <td id="compareTablePriceB">S/ --</td>
+            </tr>
+            <tr>
+              <td>Estabilidad</td>
+              <td id="compareTableStabilityA">--</td>
+              <td id="compareTableStabilityB">--</td>
+            </tr>
+            <tr>
+              <td>Tendencia</td>
+              <td id="compareTableTrendA">--</td>
+              <td id="compareTableTrendB">--</td>
+            </tr>
+            <tr>
+              <td>Recomendacion</td>
+              <td id="compareTableRecoA">--</td>
+              <td id="compareTableRecoB">--</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Graficos simples</h2>
+        <p>Visuales claros para entender la demanda y la comparacion.</p>
+      </div>
+      <div class="chart-grid">
+        <div class="card chart">
+          <h3>Demanda historica</h3>
+          {% if plotly_demand %}
+            {{ plotly_demand | safe }}
+          {% else %}
+            <div class="empty">Grafico no disponible.</div>
+          {% endif %}
+        </div>
+        <div class="card chart">
+          <h3>Nuevo vs usado</h3>
+          {% if plotly_new_vs_used %}
+            {{ plotly_new_vs_used | safe }}
+          {% else %}
+            <div class="empty">Grafico no disponible.</div>
+          {% endif %}
+        </div>
+        <div class="card chart">
+          <h3>Tendencias</h3>
+          {% if plotly_trends %}
+            {{ plotly_trends | safe }}
+          {% else %}
+            <div class="empty">Grafico no disponible.</div>
+          {% endif %}
+        </div>
+        <div class="card chart">
+          <h3>Predicciones</h3>
+          {% if plotly_predictions %}
+            {{ plotly_predictions | safe }}
+          {% else %}
+            <div class="empty">Grafico no disponible.</div>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Comparacion entre modelos</h2>
+        <p>Resumen sencillo para usuarios no tecnicos.</p>
+      </div>
+      <div class="table-grid">
+        {% if tables %}
+          {% for table in tables if table.title in ["Resumen de demanda", "Nuevo vs usado", "Prediccion demanda"] %}
+          <div class="card">
+            <h3>{{ table.title }}</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    {% for col in table.columns %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in table.rows %}
+                  {% set model_index = table.columns.index("model_id") if "model_id" in table.columns else None %}
+                  <tr{% if model_index is not none %} data-model="{{ row[model_index] | upper }}"{% endif %}>
+                    {% for cell in row %}
+                    <td>{{ cell }}</td>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="card"><div class="empty">No hay tablas cargadas.</div></div>
+        {% endif %}
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Proyecto Toyota Predictor Peru</span>
+    <span class="muted">Generado con Python, Plotly y Jinja2</span>
+  </footer>
+
+  <script>
+    window.TOYOTA_TABLES = {{ tables | tojson if tables else "[]" }};
+  </script>
+  <script src="dashboard/model_compare.js"></script>
+  <script src="dashboard/model_charts.js"></script>
+  <script src="static/js/model_selector.js"></script>
+</body>
+</html>

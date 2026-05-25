@@ -1,0 +1,40 @@
+from __future__ import annotations
+
+from pathlib import Path
+
+import pandas as pd
+
+from ._common import ReaderError, ensure_not_empty, normalize_columns, validate_columns
+
+DEFAULT_PATH = Path("1_data/raw/used_listings.csv")
+REQUIRED_COLUMNS = [
+    "listing_id",
+    "model_id",
+    "model_name",
+    "year",
+    "mileage_km",
+    "price_pen",
+    "location",
+    "condition",
+    "posted_date",
+    "source_url",
+    "source",
+]
+
+
+def read_used_cars_csv(path: str | Path = DEFAULT_PATH) -> pd.DataFrame:
+    """Lee avisos de autos usados desde un CSV local."""
+
+    path = Path(path)
+    try:
+        df = pd.read_csv(path, parse_dates=["posted_date"])
+    except FileNotFoundError as exc:
+        raise ReaderError(f"No se encontro el archivo: {path}") from exc
+    except Exception as exc:
+        raise ReaderError(f"Error leyendo autos usados: {exc}") from exc
+
+    df = normalize_columns(df)
+    validate_columns(df, REQUIRED_COLUMNS)
+    ensure_not_empty(df, f"autos usados ({path})")
+
+    return df[REQUIRED_COLUMNS]

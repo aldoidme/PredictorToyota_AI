@@ -1,0 +1,4 @@
+model_id,brand,name,segment,year_start,year_end,fuel_type,transmission,body_type,notes
+COROLLA,Toyota,Corolla,Sedan,1966,,Gasolina,Automatico,Sedan,
+HILUX,Toyota,Hilux,Pickup,1968,,Diesel,Manual,Pickup,
+RAV4,Toyota,RAV4,SUV,1994,,Gasolina,Automatico,SUV,
