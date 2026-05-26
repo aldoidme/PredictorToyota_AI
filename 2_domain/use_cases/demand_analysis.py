@@ -10,6 +10,19 @@ def analyze_model_demand(
 ) -> pd.DataFrame:
     """Analiza demanda por modelo y region con ventanas simples."""
 
+    result_columns = [
+        "model_id",
+        "region",
+        "last_period",
+        "last_units",
+        "prev_units",
+        "pct_change",
+        "demand_trend",
+    ]
+
+    if df is None or df.empty:
+        return pd.DataFrame(columns=result_columns)
+
     for col in REQUIRED_COLUMNS:
         if col not in df.columns:
             raise ValueError(f"Falta columna requerida: {col}")
@@ -69,4 +82,4 @@ def analyze_model_demand(
             }
         )
 
-    return pd.DataFrame(rows)
+    return pd.DataFrame(rows, columns=result_columns)

@@ -28,6 +28,11 @@ def build_stock_trend_predictions(
 ) -> pd.DataFrame:
     """Predice tendencia de acciones con RandomForest."""
 
+    result_columns = ["symbol", "last_date", "prob_up", "trend", "confidence"]
+
+    if df is None or df.empty:
+        return pd.DataFrame(columns=result_columns)
+
     for col in REQUIRED_COLUMNS:
         if col not in df.columns:
             raise ValueError(f"Falta columna requerida: {col}")
@@ -83,4 +88,4 @@ def build_stock_trend_predictions(
             }
         )
 
-    return pd.DataFrame(results)
+    return pd.DataFrame(results, columns=result_columns)

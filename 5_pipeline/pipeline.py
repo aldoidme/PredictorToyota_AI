@@ -18,6 +18,8 @@ for path in [ROOT_DIR, DOMAIN_DIR, INFRA_DIR, PRESENTATION_DIR]:
 
 from config import settings
 from readers import (
+    ReaderError,
+    empty_frame,
     fetch_trends,
     fetch_yahoo_finance,
     read_new_prices_csv,
@@ -76,36 +78,141 @@ def load_config() -> dict[str, Any]:
     }
 
 
+REQUIRED_COLUMNS: dict[str, list[str]] = {
+    "stock": [
+        "symbol",
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "adj_close",
+        "volume",
+        "currency",
+        "source",
+    ],
+    "trends": ["keyword", "region", "date", "value", "source"],
+    "sales": ["model_id", "region", "period", "units_sold", "channel", "source"],
+    "sales_history": ["model_id", "region", "period", "units_sold", "source"],
+    "catalog": [
+        "model_id",
+        "brand",
+        "name",
+        "segment",
+        "year_start",
+        "year_end",
+        "fuel_type",
+        "transmission",
+        "body_type",
+        "notes",
+    ],
+    "used": [
+        "listing_id",
+        "model_id",
+        "model_name",
+        "year",
+        "mileage_km",
+        "price_pen",
+        "location",
+        "condition",
+        "posted_date",
+        "source_url",
+        "source",
+    ],
+    "new_prices": ["model_id", "price_pen", "currency", "source", "as_of"],
+    "used_prices": ["model_id", "price_pen", "currency", "source", "as_of"],
+}
+
+
+def _safe_read(label: str, reader, columns: list[str], *args, **kwargs) -> pd.DataFrame:
+    try:
+        df = reader(*args, **kwargs)
+    except ReaderError:
+        return empty_frame(columns)
+    except Exception:
+        return empty_frame(columns)
+
+    if df is None or df.empty:
+        return empty_frame(columns)
+    return df
+
+
 def read_data(config: dict[str, Any]) -> dict[str, pd.DataFrame]:
     """Lee los datos desde fuentes configuradas."""
 
     if config["stock_source"] == "yfinance":
-        stock_df = fetch_yahoo_finance(
+        stock_df = _safe_read(
+            "acciones",
+            fetch_yahoo_finance,
+            REQUIRED_COLUMNS["stock"],
             symbol=config["stock_symbol"],
             start=config["stock_start"],
             end=None,
             currency=config["stock_currency"],
         )
     else:
-        stock_df = read_stock_csv(config["raw_dir"] / "stock_toyota.csv")
+        stock_df = _safe_read(
+            "acciones",
+            read_stock_csv,
+            REQUIRED_COLUMNS["stock"],
+            config["raw_dir"] / "stock_toyota.csv",
+        )
 
     if config["trends_source"] == "pytrends":
-        trends_df = fetch_trends(
+        trends_df = _safe_read(
+            "tendencias",
+            fetch_trends,
+            REQUIRED_COLUMNS["trends"],
             keywords=config["trends_keywords"],
             geo=config["trends_geo"],
             timeframe=config["trends_timeframe"],
         )
     else:
-        trends_df = read_trends_csv(config["raw_dir"] / "trends_toyota.csv")
+        trends_df = _safe_read(
+            "tendencias",
+            read_trends_csv,
+            REQUIRED_COLUMNS["trends"],
+            config["raw_dir"] / "trends_toyota.csv",
+        )
 
     return {
         "stock": stock_df,
-        "sales": read_sales_csv(config["raw_dir"] / "sales_monthly.csv"),
-        "sales_history": read_sales_history_csv(config["raw_dir"] / "sales_history.csv"),
-        "catalog": read_toyota_catalog_csv(config["raw_dir"] / "toyota_catalog.csv"),
-        "used": read_used_cars_csv(config["raw_dir"] / "used_listings.csv"),
-        "new_prices": read_new_prices_csv(config["raw_dir"] / "new_prices.csv"),
-        "used_prices": read_used_prices_csv(config["raw_dir"] / "used_prices.csv"),
+        "sales": _safe_read(
+            "ventas",
+            read_sales_csv,
+            REQUIRED_COLUMNS["sales"],
+            config["raw_dir"] / "sales_monthly.csv",
+        ),
+        "sales_history": _safe_read(
+            "ventas historicas",
+            read_sales_history_csv,
+            REQUIRED_COLUMNS["sales_history"],
+            config["raw_dir"] / "sales_history.csv",
+        ),
+        "catalog": _safe_read(
+            "catalogo",
+            read_toyota_catalog_csv,
+            REQUIRED_COLUMNS["catalog"],
+            config["raw_dir"] / "toyota_catalog.csv",
+        ),
+        "used": _safe_read(
+            "usados",
+            read_used_cars_csv,
+            REQUIRED_COLUMNS["used"],
+            config["raw_dir"] / "used_listings.csv",
+        ),
+        "new_prices": _safe_read(
+            "precios nuevos",
+            read_new_prices_csv,
+            REQUIRED_COLUMNS["new_prices"],
+            config["raw_dir"] / "new_prices.csv",
+        ),
+        "used_prices": _safe_read(
+            "precios usados",
+            read_used_prices_csv,
+            REQUIRED_COLUMNS["used_prices"],
+            config["raw_dir"] / "used_prices.csv",
+        ),
         "trends": trends_df,
     }
 
@@ -283,12 +390,25 @@ def build_context(
         ),
     ]
 
+    missing_sources = [
+        name for name, df in cleaned.items() if df is None or df.empty
+    ]
+    if len(missing_sources) == len(cleaned):
+        data_status = "Sin datos"
+        summary_text = "Informacion no disponible actualmente."
+    elif missing_sources:
+        data_status = "Datos parciales"
+        summary_text = "Informacion no disponible actualmente en algunas fuentes."
+    else:
+        data_status = "Datos OK"
+        summary_text = "Acciones, ventas y tendencias en un solo lugar."
+
     return {
         "report_title": "Toyota Peru - Dashboard IDME",
         "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
-        "data_status": "Datos OK",
+        "data_status": data_status,
         "headline": "Panorama Toyota en Peru",
-        "summary_text": "Acciones, ventas y tendencias en un solo lugar.",
+        "summary_text": summary_text,
         "kpis": kpis,
         "status_summary": "Resumen ejecutivo generado con reglas simples.",
         "status_points": status_points,

@@ -13,6 +13,17 @@ def compare_new_vs_used(
 ) -> pd.DataFrame:
     """Compara actividad de usados vs ventas nuevas en un periodo."""
 
+    result_columns = [
+        "model_id",
+        "used_count",
+        "new_units",
+        "ratio_used_new",
+        "recommendation",
+    ]
+
+    if used_df is None or sales_df is None or used_df.empty or sales_df.empty:
+        return pd.DataFrame(columns=result_columns)
+
     for col in REQUIRED_USED:
         if col not in used_df.columns:
             raise ValueError(f"Falta columna requerida en usados: {col}")
@@ -27,7 +38,7 @@ def compare_new_vs_used(
 
     end_date = max(used["posted_date"].max(), sales["period"].max())
     if pd.isna(end_date):
-        raise ValueError("No hay fechas validas para comparar nuevo vs usado.")
+        return pd.DataFrame(columns=result_columns)
 
     start_date = end_date - pd.DateOffset(months=months)
 
@@ -70,4 +81,4 @@ def compare_new_vs_used(
 
     summary["recommendation"] = summary.apply(_recommend, axis=1)
 
-    return summary
+    return summary[result_columns]

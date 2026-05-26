@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const tables = window.TOYOTA_TABLES || [];
+  const NO_DATA = "Informacion no disponible actualmente";
   const demandTable = tables.find((t) => t.title === "Resumen de demanda");
   const compareTable = tables.find((t) => t.title === "Nuevo vs usado");
   const predictionTable = tables.find((t) => t.title === "Prediccion demanda");
@@ -58,12 +59,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function mapDemandLabel(value) {
-    if (!value) return "Sin data";
+    if (!value) return NO_DATA;
     const label = String(value).toLowerCase();
     if (label.includes("crece")) return "Alta";
     if (label.includes("cae")) return "Baja";
     if (label.includes("estable")) return "Media";
-    return "Sin data";
+    return NO_DATA;
   }
 
   function applyDemandState(stateLabel) {
@@ -95,30 +96,32 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    demandBadge.textContent = "Sin data";
+    demandBadge.textContent = NO_DATA;
     demandFill.style.width = "0%";
-    demandFoot.textContent = "Selecciona un modelo para ver su demanda.";
+    demandFoot.textContent = NO_DATA;
   }
 
   function updateFinalRecommendation(demandLabel, compareLabel, stabilityLabel) {
     if (!finalRecoBadge || !finalRecoTitle || !finalRecoChips) return;
 
     const chips = [];
-    if (demandLabel && demandLabel !== "Sin data") {
+    if (demandLabel && demandLabel !== NO_DATA) {
       chips.push(`Demanda ${demandLabel.toLowerCase()}`);
     }
-    if (stabilityLabel && stabilityLabel !== "Sin data") {
+    if (stabilityLabel && stabilityLabel !== NO_DATA) {
       chips.push(`Mercado ${stabilityLabel.toLowerCase()}`);
     }
-    if (compareLabel && compareLabel !== "Sin data") {
+    if (compareLabel && compareLabel !== NO_DATA) {
       chips.push(compareLabel);
     }
 
-    finalRecoTitle.textContent = compareLabel || "Mercado estable";
+    finalRecoTitle.textContent = compareLabel && compareLabel !== NO_DATA
+      ? compareLabel
+      : NO_DATA;
     finalRecoBadge.textContent = "Recomendacion";
     finalRecoChips.innerHTML = chips.length
       ? chips.map((text) => `<span class="chip">${text}</span>`).join("")
-      : "<span class=\"chip\">Sin data</span>";
+      : `<span class="chip">${NO_DATA}</span>`;
   }
 
   function updateToyotaStatus(stockTrend, actionLabel) {
@@ -126,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!stockTrend) {
       toyotaStatusTitle.textContent = "Estado estable";
-      toyotaStatusSubtitle.textContent = "Sin data disponible.";
+      toyotaStatusSubtitle.textContent = NO_DATA;
       toyotaTrend.textContent = "Tendencia: --";
       toyotaAction.textContent = "Recomendacion: --";
       return;
@@ -149,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function mapRecommendation(value) {
-    if (!value) return "Sin data";
+    if (!value) return NO_DATA;
     const label = String(value).toLowerCase();
     if (label.includes("recomendable usado")) return "Conviene usado";
     if (label.includes("recomendable nuevo")) return "Conviene nuevo";
@@ -158,9 +161,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function mapStability(ratioValue) {
-    if (ratioValue === null || ratioValue === undefined) return "Sin data";
+    if (ratioValue === null || ratioValue === undefined) return NO_DATA;
     const ratio = Number.parseFloat(ratioValue);
-    if (Number.isNaN(ratio)) return "Sin data";
+    if (Number.isNaN(ratio)) return NO_DATA;
     if (ratio >= 0.8 && ratio <= 1.2) return "Estable";
     return "Variable";
   }
@@ -203,14 +206,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (usedRecommendation) {
       usedRecommendation.textContent = compare
         ? mapRecommendation(normalizeValue(compare.recommendation))
-        : "Sin data";
+        : NO_DATA;
     }
 
     if (predictionValue) {
       predictionValue.textContent = prediction ? normalizeValue(prediction.predicted_units) ?? "--" : "--";
     }
     if (predictionTrend) {
-      predictionTrend.textContent = prediction ? normalizeValue(prediction.trend) ?? "Sin data" : "Sin data";
+      predictionTrend.textContent = prediction ? normalizeValue(prediction.trend) ?? NO_DATA : NO_DATA;
     }
 
     if (modelRecommendation) {
@@ -225,7 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (summaryPriceUsed) summaryPriceUsed.textContent = "S/ --";
     const compareLabel = compare
       ? mapRecommendation(normalizeValue(compare.recommendation))
-      : "Sin data";
+      : NO_DATA;
 
     if (summaryRecommendation) {
       summaryRecommendation.textContent = compareLabel;
@@ -239,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (compareStability) {
       compareStability.textContent = compare
         ? mapStability(normalizeValue(compare.ratio_used_new))
-        : "Sin data";
+        : NO_DATA;
     }
     if (compareRecommendation) {
       compareRecommendation.textContent = compareLabel;
@@ -247,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const stabilityLabel = compare
       ? mapStability(normalizeValue(compare.ratio_used_new))
-      : "Sin data";
+      : NO_DATA;
 
     updateFinalRecommendation(demandLabel, compareLabel, stabilityLabel);
 

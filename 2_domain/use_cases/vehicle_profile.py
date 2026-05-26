@@ -35,10 +35,17 @@ def _sales_summary_map(df: pd.DataFrame | None) -> dict[str, dict[str, Any]]:
             if pd.notna(last_period)
             else None
         )
+        last_period_value = None
+        if pd.notna(last_period):
+            last_period_value = (
+                last_period.date().isoformat()
+                if hasattr(last_period, "date")
+                else str(last_period)
+            )
         summary[model_id] = {
             "sales_total": total_units,
             "sales_last_period": last_units,
-            "sales_last_period_date": last_period,
+            "sales_last_period_date": last_period_value,
         }
     return summary
 

@@ -25,3 +25,9 @@ def validate_columns(df: pd.DataFrame, required: Sequence[str]) -> None:
 def ensure_not_empty(df: pd.DataFrame, context: str) -> None:
     if df.empty:
         raise ReaderError(f"No hay datos en {context}.")
+
+
+def empty_frame(required: Sequence[str]) -> pd.DataFrame:
+    """Crea un DataFrame vacio con columnas requeridas para fallbacks."""
+
+    return pd.DataFrame({col: pd.Series(dtype="object") for col in required})

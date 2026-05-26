@@ -3,36 +3,31 @@
     <h2>Comparacion nuevo vs usado</h2>
     <p>Elige rapido que conviene mas comprar.</p>
   </div>
-  <div class="card compare-card">
-    <table class="compare-table">
-      <thead>
-        <tr>
-          <th>Indicador</th>
-          <th>Detalle</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Precio nuevo</td>
-          <td id="compareNewPrice">S/ --</td>
-        </tr>
-        <tr>
-          <td>Precio usado</td>
-          <td id="compareUsedPrice">S/ --</td>
-        </tr>
-        <tr>
-          <td>Diferencia</td>
-          <td id="compareDiff">S/ --</td>
-        </tr>
-        <tr>
-          <td>Estabilidad</td>
-          <td id="compareStability">Sin data</td>
-        </tr>
-        <tr>
-          <td>Recomendacion</td>
-          <td id="compareRecommendation">--</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="new-vs-used-grid">
+    <div class="new-vs-used-card">
+      <div class="nvu-label">Precio nuevo</div>
+      <div class="nvu-value" id="compareNewPrice">S/ --</div>
+      <div class="nvu-sub">Referencia oficial</div>
+    </div>
+    <div class="new-vs-used-card">
+      <div class="nvu-label">Precio usado</div>
+      <div class="nvu-value" id="compareUsedPrice">S/ --</div>
+      <div class="nvu-sub">Promedio mercado</div>
+    </div>
+    <div class="new-vs-used-card">
+      <div class="nvu-label">Diferencia</div>
+      <div class="nvu-value" id="compareDiff">S/ --</div>
+      <div class="nvu-sub">Brecha entre precios</div>
+    </div>
+    <div class="new-vs-used-card">
+      <div class="nvu-label">Estabilidad</div>
+      <div class="nvu-value nvu-pill" id="compareStability">Sin data</div>
+      <div class="nvu-sub">Comportamiento reciente</div>
+    </div>
+    <div class="new-vs-used-card highlight">
+      <div class="nvu-label">Recomendacion</div>
+      <div class="nvu-value nvu-pill" id="compareRecommendation">--</div>
+      <div class="nvu-sub">Resultado para usuarios</div>
+    </div>
   </div>
 </section>

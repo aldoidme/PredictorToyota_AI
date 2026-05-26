@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const tables = window.TOYOTA_TABLES || [];
+  const NO_DATA = "Informacion no disponible actualmente";
+  const profiles = window.TOYOTA_PROFILES || [];
   const demandTable = tables.find((t) => t.title === "Resumen de demanda");
   const compareTable = tables.find((t) => t.title === "Nuevo vs usado");
   const predictionTable = tables.find((t) => t.title === "Prediccion demanda");
@@ -71,26 +73,46 @@ document.addEventListener("DOMContentLoaded", () => {
     return value;
   }
 
+  function profileFor(modelId) {
+    if (!modelId) return null;
+    const key = String(modelId).toUpperCase();
+    return profiles.find((item) => String(item.model_id).toUpperCase() === key) || null;
+  }
+
+  function pickPrice(profile) {
+    if (!profile) return null;
+    if (profile.price_new !== null && profile.price_new !== undefined) return profile.price_new;
+    if (profile.price_used !== null && profile.price_used !== undefined) return profile.price_used;
+    return null;
+  }
+
+  function formatPrice(value) {
+    if (value === null || value === undefined) return "S/ --";
+    const num = Number.parseFloat(value);
+    if (Number.isNaN(num)) return "S/ --";
+    return `S/ ${Math.round(num)}`;
+  }
+
   function mapDemandLabel(value) {
-    if (!value) return "Sin data";
+    if (!value) return NO_DATA;
     const label = String(value).toLowerCase();
     if (label.includes("crece")) return "Alta";
     if (label.includes("cae")) return "Baja";
     if (label.includes("estable")) return "Media";
-    return "Sin data";
+    return NO_DATA;
   }
 
   function mapTrendLabel(value) {
-    if (!value) return "Sin data";
+    if (!value) return NO_DATA;
     const label = String(value).toLowerCase();
     if (label.includes("crece")) return "Sube";
     if (label.includes("cae")) return "Baja";
     if (label.includes("estable")) return "Estable";
-    return "Sin data";
+    return NO_DATA;
   }
 
   function mapRecommendation(value) {
-    if (!value) return "Sin data";
+    if (!value) return NO_DATA;
     const label = String(value).toLowerCase();
     if (label.includes("recomendable usado")) return "Conviene usado";
     if (label.includes("recomendable nuevo")) return "Conviene nuevo";
@@ -99,9 +121,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function mapStability(ratioValue) {
-    if (ratioValue === null || ratioValue === undefined) return "Sin data";
+    if (ratioValue === null || ratioValue === undefined) return NO_DATA;
     const ratio = Number.parseFloat(ratioValue);
-    if (Number.isNaN(ratio)) return "Sin data";
+    if (Number.isNaN(ratio)) return NO_DATA;
     if (ratio >= 0.8 && ratio <= 1.2) return "Estable";
     return "Variable";
   }
@@ -129,6 +151,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const demand = findRow(demandTable, modelId);
     const compare = findRow(compareTable, modelId);
     const prediction = findRow(predictionTable, modelId);
+    const profile = profileFor(modelId);
+    const priceValue = pickPrice(profile);
 
     const demandLabel = mapDemandLabel(demand ? normalizeValue(demand.demand_trend) : null);
     const trendLabel = mapTrendLabel(prediction ? normalizeValue(prediction.trend) : null);
@@ -139,13 +163,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (ui.header) ui.header.textContent = label;
     if (ui.demand) ui.demand.textContent = demandLabel;
     if (ui.demandBar) ui.demandBar.style.width = demandBarWidth(demandLabel);
-    if (ui.price) ui.price.textContent = "S/ --";
+    if (ui.price) ui.price.textContent = formatPrice(priceValue);
     if (ui.stability) ui.stability.textContent = stabilityLabel;
     if (ui.trend) ui.trend.textContent = trendLabel;
     if (ui.reco) ui.reco.textContent = recommendationLabel;
 
     if (ui.tableDemand) ui.tableDemand.textContent = demandLabel;
-    if (ui.tablePrice) ui.tablePrice.textContent = "S/ --";
+    if (ui.tablePrice) ui.tablePrice.textContent = formatPrice(priceValue);
     if (ui.tableStability) ui.tableStability.textContent = stabilityLabel;
     if (ui.tableTrend) ui.tableTrend.textContent = trendLabel;
     if (ui.tableReco) ui.tableReco.textContent = recommendationLabel;

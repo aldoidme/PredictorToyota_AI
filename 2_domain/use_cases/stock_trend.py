@@ -18,6 +18,19 @@ def _classify_change(pct_change: float | None, threshold: float) -> str:
 def analyze_stock_trend(df: pd.DataFrame, threshold: float = 0.02) -> pd.DataFrame:
     """Analiza tendencia basica de acciones por simbolo."""
 
+    result_columns = [
+        "symbol",
+        "last_date",
+        "last_close",
+        "prev_close",
+        "change",
+        "pct_change",
+        "trend",
+    ]
+
+    if df is None or df.empty:
+        return pd.DataFrame(columns=result_columns)
+
     for col in REQUIRED_COLUMNS:
         if col not in df.columns:
             raise ValueError(f"Falta columna requerida: {col}")
@@ -27,6 +40,9 @@ def analyze_stock_trend(df: pd.DataFrame, threshold: float = 0.02) -> pd.DataFra
     data["close"] = pd.to_numeric(data["close"], errors="coerce")
     data = data.dropna(subset=["symbol", "date", "close"])
     data = data.sort_values(["symbol", "date"], kind="mergesort")
+
+    if data.empty:
+        return pd.DataFrame(columns=result_columns)
 
     def _calc(group: pd.DataFrame) -> pd.Series:
         symbol = group.name if "symbol" not in group.columns else group["symbol"].iloc[-1]
@@ -64,4 +80,4 @@ def analyze_stock_trend(df: pd.DataFrame, threshold: float = 0.02) -> pd.DataFra
         )
 
     summary = data.groupby("symbol", as_index=False).apply(_calc)
-    return summary.reset_index(drop=True)
+    return summary.reset_index(drop=True)[result_columns]

@@ -321,6 +321,7 @@
 
   <script>
     window.TOYOTA_TABLES = {{ tables | tojson if tables else "[]" }};
+    window.TOYOTA_PROFILES = {{ vehicle_profiles | tojson if vehicle_profiles else "[]" }};
   </script>
   <script src="dashboard/model_compare.js"></script>
   <script src="dashboard/model_charts.js"></script>

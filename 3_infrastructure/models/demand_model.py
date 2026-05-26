@@ -18,6 +18,20 @@ def build_demand_predictions(
 ) -> pd.DataFrame:
     """Predice demanda con regresion lineal simple."""
 
+    result_columns = [
+        "model_id",
+        "region",
+        "next_period",
+        "predicted_units",
+        "pct_change",
+        "trend",
+        "prob_growth",
+        "confidence",
+    ]
+
+    if df is None or df.empty:
+        return pd.DataFrame(columns=result_columns)
+
     for col in REQUIRED_COLUMNS:
         if col not in df.columns:
             raise ValueError(f"Falta columna requerida: {col}")
@@ -86,4 +100,4 @@ def build_demand_predictions(
             }
         )
 
-    return pd.DataFrame(results)
+    return pd.DataFrame(results, columns=result_columns)
